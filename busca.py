@@ -21,13 +21,16 @@ tamanhoDoResultadoDeBusca = len(driver.find_element(By.ID, 'resultadoDaBuscaDeIm
 
 for apartamento in range(tamanhoDoResultadoDeBusca):
     
+    #Adcionar a ordem do imóvel no arquivo Excel
     linhaComeco = planilha.max_row + 1
     planilha.cell(row=linhaComeco, column=1).value = apartamento + 1
 
+    #Coletar e adcionar o endereço no arquivo Excel
     endereço = driver.find_elements(By.TAG_NAME, 'h2')[apartamento].text
     planilha.cell(row=linhaComeco, column=2).value = endereço
 
 
+    #Salvar todas alterações 
     arquivoExcel.save('Apartamentos.xlsx')
 
 valor = ''
