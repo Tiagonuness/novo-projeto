@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 import time
 import openpyxl
+from openpyxl.styles import NamedStyle
 
 service = Service()
 options = webdriver.ChromeOptions()
@@ -21,7 +22,8 @@ tamanhoDoResultadoDeBusca = len(driver.find_element(By.ID, 'resultadoDaBuscaDeIm
 for apartamento in range(tamanhoDoResultadoDeBusca):
     
     #Adcionar a ordem do imóvel no arquivo Excel
-    linhaComeco = planilha.max_row + 1
+    começo = 1
+    linhaComeco = começo + 1
     planilha.cell(row=linhaComeco, column=1).value = apartamento + 1
 
     #Coletar e adcionar o endereço no arquivo Excel
@@ -31,19 +33,20 @@ for apartamento in range(tamanhoDoResultadoDeBusca):
     #Coletar e adcionar o valor do imóvel no arquivo Excel
     valor = driver.find_element(By.ID, 'resultadoDaBuscaDeImoveis').find_elements(By.TAG_NAME, 'a')[apartamento].find_elements(By.TAG_NAME, 'h4')[0]
     valor = valor.find_element(By.TAG_NAME, 'span').text
-    valor = float(valor)
+    valor = 'R$' + ' ' + valor
     planilha.cell(row=linhaComeco, column=3).value = valor
 
     #Coletar e adcionar o valor por metro quadrado do imóvel no arquivo Excel
     valorm2 = driver.find_element(By.ID, 'resultadoDaBuscaDeImoveis').find_elements(By.TAG_NAME, 'a')[apartamento].find_elements(By.TAG_NAME, 'h4')[1]
     valorm2 = valorm2.find_element(By.TAG_NAME, 'span').text
-    planilha.cell(row=linhaComeco, column=4).value = valor
+    valorm2 = 'R$' + ' ' + valorm2
+    planilha.cell(row=linhaComeco, column=4).value = valorm2
 
 
     #Salvar todas alterações 
+    começo += 1
     arquivoExcel.save('Apartamentos.xlsx')
 
-valor_por_m2 = ''
 area = ''
 
 while True: time.sleep(1000)
