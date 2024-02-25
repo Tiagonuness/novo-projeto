@@ -42,12 +42,25 @@ for apartamento in range(tamanhoDoResultadoDeBusca):
     valorm2 = 'R$' + ' ' + valorm2
     planilha.cell(row=linhaComeco, column=4).value = valorm2
 
+    #Coletar a área,quartos e suites do imóvel e adcionar na planilha Excel
+    imovel = driver.find_element(By.ID, 'resultadoDaBuscaDeImoveis').find_elements(By.TAG_NAME, 'a')[apartamento].find_elements(By.CLASS_NAME, 'new-details-ul')[0].text
+    detalhes = imovel.split('\n')
+    for li in range(len(detalhes)):
+        if 'm²' in detalhes[li]:
+            planilha.cell(row=linhaComeco, column=5).value = detalhes[li]
+        elif 'Quartos' in detalhes[li] or 'Quarto' in detalhes[li]:
+            planilha.cell(row=linhaComeco, column=6).value = detalhes[li]
+        elif 'Suítes' in detalhes[li] or 'Suíte' in detalhes[li]:
+            planilha.cell(row=linhaComeco, column=7).value = detalhes[li]
+        elif 'Vagas' in detalhes[li] or 'Vaga' in detalhes[li]:
+            planilha.cell(row=linhaComeco, column=8).value = detalhes[li]
+
+
+
 
     #Salvar todas alterações 
     começo += 1
     arquivoExcel.save('Apartamentos.xlsx')
-
-area = ''
 
 while True: time.sleep(1000)
 
