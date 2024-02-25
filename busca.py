@@ -6,7 +6,6 @@ from selenium.webdriver.support.ui import Select
 import time
 import openpyxl
 
-    
 service = Service()
 options = webdriver.ChromeOptions()
 driver = webdriver.Chrome(service=service, options=options)
@@ -29,11 +28,21 @@ for apartamento in range(tamanhoDoResultadoDeBusca):
     endereço = driver.find_elements(By.TAG_NAME, 'h2')[apartamento].text
     planilha.cell(row=linhaComeco, column=2).value = endereço
 
+    #Coletar e adcionar o valor do imóvel no arquivo Excel
+    valor = driver.find_element(By.ID, 'resultadoDaBuscaDeImoveis').find_elements(By.TAG_NAME, 'a')[apartamento].find_elements(By.TAG_NAME, 'h4')[0]
+    valor = valor.find_element(By.TAG_NAME, 'span').text
+    valor = float(valor)
+    planilha.cell(row=linhaComeco, column=3).value = valor
+
+    #Coletar e adcionar o valor por metro quadrado do imóvel no arquivo Excel
+    valorm2 = driver.find_element(By.ID, 'resultadoDaBuscaDeImoveis').find_elements(By.TAG_NAME, 'a')[apartamento].find_elements(By.TAG_NAME, 'h4')[1]
+    valorm2 = valorm2.find_element(By.TAG_NAME, 'span').text
+    planilha.cell(row=linhaComeco, column=4).value = valor
+
 
     #Salvar todas alterações 
     arquivoExcel.save('Apartamentos.xlsx')
 
-valor = ''
 valor_por_m2 = ''
 area = ''
 
